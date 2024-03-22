@@ -2,7 +2,7 @@
   import Sidebar from './lib/Sidebar.svelte';
   import NoteContainer from './lib/NoteContainer.svelte';
 
-  const sidebarPosition = "17vw";
+  const sidebarPosition = "20vw";
 </script>
 
 <main>
