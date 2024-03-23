@@ -1,5 +1,27 @@
 <script>
   import Note from './Note.svelte';
+  import { onMount } from 'svelte';
+
+  let notes = [];
+
+  onMount(updateNotes);
+
+  async function updateNotes() {
+    const res = await fetch('http://localhost:3000/api/notes');
+    notes = await res.json();
+  }
+
+  async function deleteNote(noteId) {
+    await fetch(`http://localhost:3000/api/notes/${noteId}`, 
+    {
+      method: "DELETE",
+    });
+    updateNotes();
+  }
+
+  export function addNote(note) {
+    notes = [note.detail, ...notes];
+  }
 
   export let positionLeft = "15vw";
 </script>
@@ -21,5 +43,7 @@
 </style>
 
 <div style="--position-left: {positionLeft}">
-  
+  {#each notes as note}
+    <Note title={note.title} content={note.content} id={note.id} on:requestDelete={(e) => deleteNote(e.detail.noteId)} />
+  {/each}
 </div>

@@ -1,6 +1,10 @@
 <script>
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
   export let title = "Note Title";
   export let content = "Note content...";
+  export let id;
 
   let div;
   let resetTimeout;
@@ -12,6 +16,12 @@
     resetTimeout = setTimeout(() => div.scrollTop = 0, 10000);
   }
 
+  function onDelete() {
+    dispatch('requestDelete', 
+    {
+      noteId: id,
+    });
+  }
 </script>
 
 <style>
@@ -43,6 +53,7 @@
   on:mouseleave={onLeave} 
   role="document"
 >
+  <button on:click={onDelete}>X</button>
   <p id="title">{title}</p>
   <p id="content">{content}</p>
 </div>

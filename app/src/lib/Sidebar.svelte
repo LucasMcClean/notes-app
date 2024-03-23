@@ -1,4 +1,29 @@
 <script>
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+  let titleIn;
+  let contentIn;
+
+  async function submitNote() {
+    const title = titleIn.value;
+    const content = contentIn.value;
+    const res = await fetch('http://localhost:3000/api/notes', 
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        content
+      })
+    });
+    const newNote = await res.json();
+    dispatch("noteSubmission", newNote);
+    titleIn.value = "";
+    contentIn.value = "";
+  }
   export let sidebarWidth = "15vw";
 </script>
 
@@ -51,7 +76,7 @@
 </style>
 
 <div style="--sidebar-width: {sidebarWidth}">
-  <input class="input" placeholder="Title"/>
-  <textarea class="input" placeholder="Content..."></textarea>
-  <button>Add Note</button>
+  <input bind:this={titleIn} class="input" placeholder="Title"/>
+  <textarea bind:this={contentIn} class="input" placeholder="Content..."></textarea>
+  <button on:click={submitNote}>Add Note</button>
 </div>

@@ -14,12 +14,10 @@ app.get("/api/notes", async (req, res) => {
   res.json(notes);
 });
 
-app.post("api/notes", async (req, res) => {
+app.post("/api/notes", async (req, res) => {
   const { title, content } = req.body;
-  console.log("Post request", title, content);
   if (!title) return res.status(400).send("Title field required");
   if (!content) return res.status(400).send("Content field required");
-  console.log("Validated");
   try {
     const note = await prisma.note.create({
       data: { title, content },
@@ -30,7 +28,7 @@ app.post("api/notes", async (req, res) => {
   }
 });
 
-app.put("api/notes/:id", async (req, res) => {
+app.put("/api/notes/:id", async (req, res) => {
   const { title, content } = req.body;
   const id = parseInt(req.params.id);
 
@@ -49,8 +47,9 @@ app.put("api/notes/:id", async (req, res) => {
   }
 });
 
-app.delete("api/notes/:id", async (req, res) => {
+app.delete("/api/notes/:id", async (req, res) => {
   const id = parseInt(req.params.id);
+  console.log(id);
 
   if (!id || isNaN(id)) return res.status(400).send("Valid ID is required");
 
