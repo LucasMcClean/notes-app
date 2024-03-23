@@ -4,10 +4,10 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const PORT = process.env.port || 3000;
 
-const prisma = PrismaClient();
+const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
-app.use(cors);
+app.use(cors());
 
 app.get("/api/notes", async (req, res) => {
   const notes = await prisma.note.findMany();
@@ -16,10 +16,10 @@ app.get("/api/notes", async (req, res) => {
 
 app.post("api/notes", async (req, res) => {
   const { title, content } = req.body;
-
+  console.log("Post request", title, content);
   if (!title) return res.status(400).send("Title field required");
   if (!content) return res.status(400).send("Content field required");
-
+  console.log("Validated");
   try {
     const note = await prisma.note.create({
       data: { title, content },
